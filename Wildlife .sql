@@ -40,14 +40,26 @@ INSERT INTO sightings (species_id,ranger_id, "location",sighting_time, notes) VA
 
 
 
+
+-- 1️⃣ Register a new ranger with provided data with name = 'Derek Fox' and region = 'Coastal Plains'
+
 INSERT INTO rangers ("name",region) VALUES ( 'Derek Fox', 'Derek Fox');
 
+
+
+-- 2️⃣ Count unique species ever sighted.
 
 SELECT COUNT(DISTINCT species_id) AS number_of_unique_species_sighted FROM sightings;
 
 
+
+-- 3️⃣ Find all sightings where the location includes "Pass".
+
 SELECT * FROM sightings WHERE location LIKE '%Pass%'
 
+
+
+-- 4️⃣ List each ranger's name and their total number of sightings.
 
 SELECT 
     name, count(*) as total_sightings 
@@ -58,8 +70,13 @@ JOIN
 GROUP BY name;
 
 
+
+-- 4️⃣ List each ranger's name and their total number of sightings.
+
 SELECT common_name FROM species WHERE species.species_id NOT IN ( SELECT species_id FROM sightings )
 
+
+-- 6️⃣ Show the most recent 2 sightings.
 
 SELECT 
     s.common_name, sg.sighting_time, r.name 
@@ -74,7 +91,14 @@ ORDER BY
 LIMIT 2;
 
 
+
+-- 7️⃣ Update all species discovered before year 1800 to have status 'Historic'.
+
 UPDATE species SET  conservation_status = 'Historic' WHERE extract(year from discovery_date) < '1800'
+
+
+
+-- 8️⃣ Label each sighting's time of day as 'Morning', 'Afternoon', or 'Evening'.
 
 
 SELECT
@@ -86,5 +110,8 @@ SELECT
     END AS time_of_day
 FROM sightings;
 
+
+
+-- 9️⃣ Delete rangers who have never sighted any species
 
 DELETE FROM rangers WHERE (rangers.ranger_id NOT IN ( SELECT ranger_id FROM sightings ))
